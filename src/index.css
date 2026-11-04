@@ -134,6 +134,13 @@ a:focus-visible {
 @keyframes shimmer {
   to { background-position: 200% center; }
 }
+.intro-pulse {
+  box-shadow: 0 0 24px rgba(229, 19, 43, 0.2);
+  animation: intro-pulse 2.4s ease-in-out infinite;
+}
+@keyframes intro-pulse {
+  50% { box-shadow: 0 0 42px rgba(229, 19, 43, 0.48); }
+}
 .shimmer-text {
   background: linear-gradient(90deg, #f4f1ec 0%, #f4f1ec 40%, #ff8a9a 50%, #f4f1ec 60%, #f4f1ec 100%);
   background-size: 200% auto;
@@ -147,6 +154,9 @@ a:focus-visible {
   .grain,
   .light-streak,
   .shimmer-text {
+    animation: none !important;
+  }
+  .intro-pulse {
     animation: none !important;
   }
   .light-streak {

@@ -3,7 +3,7 @@ import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { achievements, certifications, viewerProfiles, type ProfileId, type Project, type SectionId } from './data/portfolio';
 import { SmoothScrollProvider, useSmoothScroll } from './hooks/smoothScroll';
 import CustomCursor from './components/CustomCursor';
-import OpeningSequence from './components/OpeningSequence';
+import NetflixIntro from './components/NetflixIntro';
 import ProfileSelector from './components/ProfileSelector';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -31,12 +31,21 @@ const ResumeModal = lazy(() => import('./components/ResumeModal'));
 type Stage = 'opening' | 'profiles' | 'home';
 
 const STORAGE_KEY = 'samkit-series-profile';
+const INTRO_STORAGE_KEY = 'hasSeenIntro';
 function readStoredProfile(): ProfileId | null {
   try {
     const v = sessionStorage.getItem(STORAGE_KEY);
     return viewerProfiles.some((p) => p.id === v) ? (v as ProfileId) : null;
   } catch {
     return null;
+  }
+}
+
+function readIntroSeen(): boolean {
+  try {
+    return sessionStorage.getItem(INTRO_STORAGE_KEY) === 'true';
+  } catch {
+    return false;
   }
 }
 
@@ -50,7 +59,8 @@ export default function App() {
 
 function Series() {
   const stored = readStoredProfile();
-  const [stage, setStage] = useState<Stage>(stored ? 'home' : 'opening');
+  const [stage, setStage] = useState<Stage>(() => (readIntroSeen() ? (stored ? 'home' : 'profiles') : 'opening'));
+  const [hasProfile, setHasProfile] = useState(Boolean(stored));
   const [profileId, setProfileId] = useState<ProfileId>(stored ?? 'samkit');
   const [playing, setPlaying] = useState(false);
   const [project, setProject] = useState<Project | null>(null);
@@ -70,6 +80,7 @@ function Series() {
   const pickProfile = useCallback(
     (id: ProfileId) => {
       setProfileId(id);
+      setHasProfile(true);
       try {
         sessionStorage.setItem(STORAGE_KEY, id);
       } catch {
@@ -94,6 +105,14 @@ function Series() {
   }, [toast]);
 
   const closeIntro = useCallback(() => setPlaying(false), []);
+  const finishOpening = useCallback(() => {
+    try {
+      sessionStorage.setItem(INTRO_STORAGE_KEY, 'true');
+    } catch {
+      /* storage unavailable — the intro will play again on the next visit */
+    }
+    setStage(hasProfile ? 'home' : 'profiles');
+  }, [hasProfile]);
   const closeProject = useCallback(() => setProject(null), []);
   const closeResume = useCallback(() => setResumeOpen(false), []);
 
@@ -113,7 +132,7 @@ function Series() {
       <CustomCursor />
 
       <AnimatePresence>
-        {stage === 'opening' && <OpeningSequence key="opening" onDone={() => setStage('profiles')} />}
+        {stage === 'opening' && <NetflixIntro key="opening" onDone={finishOpening} />}
         {stage === 'profiles' && <ProfileSelector key="profiles" onPick={pickProfile} />}
       </AnimatePresence>
 

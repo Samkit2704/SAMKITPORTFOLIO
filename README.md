@@ -39,7 +39,7 @@ The static site is written to `dist/` and can be deployed as-is to Vercel, Netli
 | Top 10 row | `topPicks` |
 | ▶ Play Intro highlight reel | `introSlides` |
 | Profile order (Recruiter / Developer / Creative) | `viewerProfiles` |
-| Opening studio card text | `profile.originalLabel` |
+| Intro overline and identity | `profile.fullName` |
 
 **Resume:** `public/assets/Samkit_Resume.pdf` is the provided Samkit resume. Update `profile.resumePdf` in `src/data/portfolio.ts` if you change its filename.
 
@@ -58,7 +58,7 @@ src/
   data/portfolio.ts        ← single source of truth (from the resume)
   App.tsx                  ← stages: opening → profile select → home; overlays
   components/
-    OpeningSequence        ← black → studio card → SAMKIT → THE SERIES → portrait → ▶ PLAY
+    NetflixIntro           ← cinematic title card, original synthesized bass sting, session memory
     ProfileSelector        ← "Who's watching?" (changes section order only)
     Navbar                 ← hide-on-scroll nav, profile switcher, mobile menu
     Hero                   ← billboard: parallax portrait, particles, light streaks, floating chips
@@ -79,6 +79,7 @@ src/
     ClientReviews         ← verified-review cards; stays in an honest empty state until populated
     CustomCursor, fx.tsx  ← cursor states, magnetic buttons, 3D tilt, text reveals, particles
   hooks/                   ← Lenis smooth scroll + scroll lock, media queries, watch progress
+  utils/netflixSound.ts    ← original two-hit Web Audio intro cue (no audio asset required)
 scripts/build-images.mjs   ← portrait/share-image pipeline (sharp)
 ```
 
@@ -104,6 +105,8 @@ Import `Samkit2704/SAMKITPORTFOLIO` in Vercel and keep the Vite defaults (`npm r
 - The custom cursor appears only with a mouse or trackpad.
 - Overlays close with Esc, and the highlight reel supports Space and the ← → keys.
 - Portraits are responsive WebP files (25–90 KB). Overlays are code-split, and particles pause when they're off screen.
+- The intro sound is synthesized with Web Audio after an explicit button press; the cue is an original cinematic sting, not a copy of a branded sound logo.
+- `hasSeenIntro` is stored for the current browser tab session. The final contact section's **REPLAY OPENING** action replays it.
 
 ## Keyboard shortcuts
 
