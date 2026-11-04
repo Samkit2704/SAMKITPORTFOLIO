@@ -75,7 +75,7 @@ src/
     FinalCTA               ← TO BE CONTINUED… + contact links
     MarketingServices     ← service cards for paid media, content, SEO and CRO
     PricingPackages       ← private price teasers with retainer/project detail modal
-    PlanDetailModal       ← itemized rates, deliverables, timeline, communication, and email CTA
+    PlanDetailModal       ← viewport-fixed portal with itemized rates, deliverables, timeline, and email CTA
     ClientProjects        ← CV-backed project showcase with the existing case-study overlay
     ClientReviews         ← verified-review cards; stays in an honest empty state until populated
     CustomCursor, fx.tsx  ← cursor states, magnetic buttons, 3D tilt, text reveals, particles

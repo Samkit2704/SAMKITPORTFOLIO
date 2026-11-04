@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Check, X } from 'lucide-react';
 import { profile } from '../data/portfolio';
+import { useScrollLock } from '../hooks/smoothScroll';
 
 export type BillingModel = 'retainer' | 'project';
 
@@ -46,10 +48,9 @@ function contactHref(tier: PricingTier, billing: BillingModel) {
 export default function PlanDetailModal({ tier, billing, onBillingChange, onClose }: PlanDetailModalProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const price = tier.prices[billing];
+  useScrollLock(true);
 
   useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     closeRef.current?.focus();
 
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
@@ -79,11 +80,10 @@ export default function PlanDetailModal({ tier, billing, onBillingChange, onClos
     window.addEventListener('keydown', onKeyDown);
     return () => {
       window.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = previousOverflow;
     };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <motion.div
       className="fixed inset-0 z-[140] flex items-center justify-center bg-black/80 p-3 backdrop-blur-md sm:p-6"
       initial={{ opacity: 0 }}
@@ -219,6 +219,7 @@ export default function PlanDetailModal({ tier, billing, onBillingChange, onClos
           </footer>
         </div>
       </motion.section>
-    </motion.div>
+    </motion.div>,
+    document.body,
   );
 }
