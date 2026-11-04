@@ -74,7 +74,8 @@ src/
     ResumeViewer/ResumeModal ← designed resume sheet, PDF viewer, download
     FinalCTA               ← TO BE CONTINUED… + contact links
     MarketingServices     ← service cards for paid media, content, SEO and CRO
-    PricingPackages       ← quote-based plans with a retainer/project toggle
+    PricingPackages       ← private price teasers with retainer/project detail modal
+    PlanDetailModal       ← itemized rates, deliverables, timeline, communication, and email CTA
     ClientProjects        ← CV-backed project showcase with the existing case-study overlay
     ClientReviews         ← verified-review cards; stays in an honest empty state until populated
     CustomCursor, fx.tsx  ← cursor states, magnetic buttons, 3D tilt, text reveals, particles
@@ -90,7 +91,7 @@ scripts/build-images.mjs   ← portrait/share-image pipeline (sharp)
 The four sections are mounted in `src/App.tsx` and linked from the responsive navigation:
 
 - `MarketingServices.tsx` exports the editable `marketingServices` list.
-- `PricingPackages.tsx` exports `pricingTiers`; prices are custom-quoted rather than invented.
+- `PricingPackages.tsx` exports `pricingTiers`; each plan includes USD/INR rates, both billing scopes, estimates, and contact details for the accessible plan modal.
 - `ClientProjects.tsx` uses the real project data from `src/data/portfolio.ts` and opens its existing case-study overlay.
 - `ClientReviews.tsx` exports the `ClientReview` type and an initially empty `clientReviews` list. Add only genuine, approved feedback; placeholder testimonials are intentionally not published.
 
