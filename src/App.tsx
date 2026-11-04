@@ -17,6 +17,10 @@ import Skills from './components/Skills';
 import Achievements from './components/Achievements';
 import ResumeSection from './components/ResumeViewer';
 import FinalCTA from './components/FinalCTA';
+import MarketingServices from './components/MarketingServices';
+import PricingPackages from './components/PricingPackages';
+import ClientProjects from './components/ClientProjects';
+import ClientReviews from './components/ClientReviews';
 import { EASE } from './components/fx';
 
 // Overlays are only needed on demand — split them out of the first load.
@@ -124,6 +128,18 @@ function Series() {
                 {sections[id]}
               </Scene>
             ))}
+            <Scene id="services">
+              <MarketingServices />
+            </Scene>
+            <Scene id="packages">
+              <PricingPackages />
+            </Scene>
+            <Scene id="projects">
+              <ClientProjects onOpen={setProject} />
+            </Scene>
+            <Scene id="reviews">
+              <ClientReviews />
+            </Scene>
             <FinalCTA onReplay={() => setStage('opening')} />
           </main>
         </motion.div>

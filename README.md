@@ -73,12 +73,29 @@ src/
     Achievements           ← award-poster cards + certification rail (links to credentials)
     ResumeViewer/ResumeModal ← designed resume sheet, PDF viewer, download
     FinalCTA               ← TO BE CONTINUED… + contact links
-    CustomCursor, fx.tsx   ← cursor states, magnetic buttons, 3D tilt, text reveals, particles
+    MarketingServices     ← service cards for paid media, content, SEO and CRO
+    PricingPackages       ← quote-based plans with a retainer/project toggle
+    ClientProjects        ← CV-backed project showcase with the existing case-study overlay
+    ClientReviews         ← verified-review cards; stays in an honest empty state until populated
+    CustomCursor, fx.tsx  ← cursor states, magnetic buttons, 3D tilt, text reveals, particles
   hooks/                   ← Lenis smooth scroll + scroll lock, media queries, watch progress
 scripts/build-images.mjs   ← portrait/share-image pipeline (sharp)
 ```
 
 **Stack:** React 18, TypeScript, Vite 6, Tailwind CSS 4, Framer Motion 11, Lenis.
+
+## Marketing sections
+
+The four sections are mounted in `src/App.tsx` and linked from the responsive navigation:
+
+- `MarketingServices.tsx` exports the editable `marketingServices` list.
+- `PricingPackages.tsx` exports `pricingTiers`; prices are custom-quoted rather than invented.
+- `ClientProjects.tsx` uses the real project data from `src/data/portfolio.ts` and opens its existing case-study overlay.
+- `ClientReviews.tsx` exports the `ClientReview` type and an initially empty `clientReviews` list. Add only genuine, approved feedback; placeholder testimonials are intentionally not published.
+
+## Deploying to Vercel
+
+Import `Samkit2704/SAMKITPORTFOLIO` in Vercel and keep the Vite defaults (`npm run build`, output directory `dist`). Subsequent pushes to the connected production branch deploy automatically. To deploy from a machine with the Vercel CLI authenticated and the project linked, run `vercel --prod`.
 
 ## Accessibility and performance
 

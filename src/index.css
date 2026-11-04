@@ -23,6 +23,7 @@
 html {
   position: relative;
   background: var(--color-ink);
+  overflow-x: clip;
   -webkit-text-size-adjust: 100%;
 }
 

@@ -2,9 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { sectionMeta, viewerProfiles, type ProfileId, type SectionId } from '../data/portfolio';
 import { useSmoothScroll } from '../hooks/smoothScroll';
-import { SeriesMark } from './Poster';
 import { ProfileAvatar } from './ProfileSelector';
 import { EASE } from './fx';
+
+const marketingLinks = [
+  { id: 'services', label: 'Services' },
+  { id: 'packages', label: 'Packages' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'reviews', label: 'Reviews' },
+];
 
 export default function Navbar({ order, profileId, onSwitch }: { order: SectionId[]; profileId: ProfileId; onSwitch: (id: ProfileId) => void }) {
   const { scrollY } = useScroll();
@@ -23,7 +29,7 @@ export default function Navbar({ order, profileId, onSwitch }: { order: SectionI
   });
 
   useEffect(() => {
-    const ids = ['top', ...order];
+    const ids = ['top', ...marketingLinks.map((link) => link.id), ...order, 'contact'];
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => e.isIntersecting && setActive(e.target.id));
@@ -65,11 +71,17 @@ export default function Navbar({ order, profileId, onSwitch }: { order: SectionI
         }`}
       >
         <div className="flex items-center gap-8 lg:gap-10">
-          <button type="button" onClick={() => go('top')} className="text-[22px]" aria-label="Back to top">
-            <SeriesMark />
+          <button type="button" onClick={() => go('top')} className="flex items-center gap-2" aria-label="Samkit home">
+            <span className="font-display text-2xl tracking-[0.12em] text-bone">SAMKIT</span>
+            <span className="rounded border border-crimson/50 bg-crimson/10 px-1.5 py-0.5 text-[8px] font-bold tracking-[0.2em] text-crimson-2 shadow-[0_0_16px_rgba(229,19,43,0.2)]">
+              SERIES
+            </span>
           </button>
-          <nav className="hidden items-center gap-6 lg:flex" aria-label="Sections">
+          <nav className="hidden items-center gap-4 2xl:flex" aria-label="Sections">
             <NavLink label="Home" active={active === 'top'} onClick={() => go('top')} />
+            {marketingLinks.map((link) => (
+              <NavLink key={link.id} label={link.label} active={active === link.id} onClick={() => go(link.id)} />
+            ))}
             {order.map((id) => (
               <NavLink key={id} label={sectionMeta[id].nav} active={active === id} onClick={() => go(id)} />
             ))}
@@ -148,13 +160,13 @@ export default function Navbar({ order, profileId, onSwitch }: { order: SectionI
         {mobileNav && (
           <motion.nav
             aria-label="Sections"
-            className="gutter border-b border-white/5 bg-ink/95 pb-6 pt-2 backdrop-blur-xl lg:hidden"
+            className="gutter max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-white/5 bg-ink/95 pb-6 pt-2 backdrop-blur-xl 2xl:hidden"
             initial={{ clipPath: 'inset(0 0 100% 0)' }}
             animate={{ clipPath: 'inset(0 0 0% 0)' }}
             exit={{ clipPath: 'inset(0 0 100% 0)' }}
             transition={{ duration: 0.45, ease: EASE }}
           >
-            {[{ id: 'top', label: 'Home' }, ...order.map((id) => ({ id, label: sectionMeta[id].nav })), { id: 'contact', label: "Let's Build" }].map((l, i) => (
+            {[{ id: 'top', label: 'Home' }, ...marketingLinks, ...order.map((id) => ({ id, label: sectionMeta[id].nav })), { id: 'contact', label: "Let's Build" }].map((l, i) => (
               <motion.button
                 key={l.id}
                 type="button"
@@ -162,7 +174,7 @@ export default function Navbar({ order, profileId, onSwitch }: { order: SectionI
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.05 * i }}
-                className={`block w-full py-3 text-left font-display text-3xl tracking-wide ${active === l.id ? 'text-crimson-2' : 'text-bone'}`}
+                className={`block w-full py-2.5 text-left font-display text-2xl tracking-wide ${active === l.id ? 'text-crimson-2' : 'text-bone'}`}
               >
                 {l.label}
               </motion.button>
@@ -176,7 +188,7 @@ export default function Navbar({ order, profileId, onSwitch }: { order: SectionI
 
 function NavLink({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} className={`relative text-[13px] font-medium transition ${active ? 'text-bone' : 'text-mist hover:text-bone'}`}>
+    <button type="button" onClick={onClick} className={`relative whitespace-nowrap text-xs font-medium transition ${active ? 'text-bone' : 'text-mist hover:text-bone'}`}>
       {label}
       {active && <motion.span layoutId="nav-underline" className="absolute -bottom-1.5 left-0 right-0 h-[2px] rounded bg-crimson" />}
     </button>
